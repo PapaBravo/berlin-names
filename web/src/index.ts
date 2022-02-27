@@ -26,10 +26,9 @@ async function load() {
   );
 }
 
-async function executeQuery(form: HTMLFormElement) {
-  // TODO better way to get value
+async function executeQuery() {
   const el = <HTMLTextAreaElement>document.getElementById("input_query");
-  const query = el.textContent || '';
+  const query = el.value;
   const result = await worker.db.query(query);
   console.log(result);
 }
