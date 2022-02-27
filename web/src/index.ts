@@ -14,7 +14,7 @@ async function load() {
         from: "inline",
         config: {
           serverMode: "full",
-          url: "/db.sqlite",
+          url: "db.sqlite",
           requestChunkSize: 4096,
         },
       },
