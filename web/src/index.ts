@@ -7,7 +7,7 @@ const workerUrl = new URL(
   import.meta.url
 );
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
-let worker : WorkerHttpvfs;
+let worker: WorkerHttpvfs;
 
 async function load() {
   worker = await createDbWorker(
@@ -24,6 +24,45 @@ async function load() {
     workerUrl.toString(),
     wasmUrl.toString()
   );
+  await writeInformation();
+}
+
+async function writeInformation() {
+
+  const container = document.getElementById('database_description');
+
+  const columns = [
+    { name: 'id', type: 'INTEGER' },
+    { name: 'vorname', type: 'TEXT' },
+    { name: 'anzahl', type: 'INTEGER' },
+    { name: 'geschlecht', type: 'TEXT' },
+    { name: 'position', type: 'INTEGER' },
+    { name: 'jahr', type: 'INTEGER' },
+    { name: 'bezirk', type: 'TEXT' },
+  ];
+  const columnsElement = document.createElement('table');
+  columnsElement.innerHTML = columns.map(c => `<tr><td>${c.name}</td><td>${c.type}</td></tr>`).join('\n');
+  container?.appendChild(columnsElement);
+
+  const boroughs = [
+    'charlottenburg-wilmersdorf',
+    'friedrichshain-kreuzberg',
+    'lichtenberg',
+    'marzahn-hellersdorf',
+    'mitte',
+    'neukoelln',
+    'pankow',
+    'reinickendorf',
+    'spandau',
+    'standesamt_i',
+    'steglitz-zehlendorf',
+    'tempelhof-schoeneberg',
+    'treptow-koepenick',
+  ];
+
+  const boroughElement = document.createElement('div');
+  boroughElement.innerHTML = boroughs.join(', ');
+  container?.appendChild(boroughElement);
 }
 
 async function executeQuery() {
