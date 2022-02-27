@@ -6,7 +6,7 @@ module.exports = {
   entry: "./src/index.ts",
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './src/index.html'
     }),
     new CopyPlugin({
       patterns: [
@@ -21,6 +21,10 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
     ],
   },
   resolve: {
@@ -31,10 +35,9 @@ module.exports = {
     library: "BerlinNames"
   },
   devServer: {
-    static: {
-      publicPath: 'dist/',
-      watch: true
-    },
-    port: 9000
+    static: path.resolve(__dirname, 'src'),
+    port: 9000,
+    liveReload: true,
+    hot: true
   },
 };

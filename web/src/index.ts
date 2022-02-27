@@ -1,5 +1,7 @@
 import { createDbWorker, WorkerHttpvfs } from "sql.js-httpvfs";
 
+import "./style.css";
+
 const workerUrl = new URL(
   "sql.js-httpvfs/dist/sqlite.worker.js",
   import.meta.url
@@ -26,7 +28,8 @@ async function load() {
 
 async function executeQuery(form: HTMLFormElement) {
   // TODO better way to get value
-  const query = form.elements[0].getAttribute('value') || '';
+  const el = <HTMLTextAreaElement>document.getElementById("input_query");
+  const query = el.textContent || '';
   const result = await worker.db.query(query);
   console.log(result);
 }
