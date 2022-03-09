@@ -65,11 +65,39 @@ async function writeInformation() {
   container?.appendChild(boroughElement);
 }
 
+function renderResultTable(result: any[]) {
+  const rootElement = document.getElementById('result-table');
+  if (!rootElement) {
+    return;
+  }
+  rootElement.textContent = '';
+
+  const columns = Object.keys(result[0]);
+  
+  let html = '<table><thead><tr>';
+  html += columns.map(c => `<th>${c}</th>`).join('\n');
+  html += '</tr></thead>';
+  html += '<tbody>';
+  html += result.map(row => {
+    return `<tr>
+      ${columns.map(c => `<td>${row[c]}</td>`).join('\n')}
+      </tr>
+    `
+  }).join('\n');
+
+  html += '</tbody></table>';
+
+  // TODO: Move to element building instead
+  // This is unsave, specifically because database content
+  // could contain malicious html/js.
+  rootElement.innerHTML = html;
+}
+
 async function executeQuery() {
   const el = <HTMLTextAreaElement>document.getElementById("input_query");
   const query = el.value;
   const result = await worker.db.query(query);
-  console.log(result);
+  renderResultTable(result);
 }
 
 load();
