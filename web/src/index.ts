@@ -73,24 +73,20 @@ function renderResultTable(result: any[]) {
   rootElement.textContent = '';
 
   const columns = Object.keys(result[0]);
-  
-  let html = '<table><thead><tr>';
-  html += columns.map(c => `<th>${c}</th>`).join('\n');
-  html += '</tr></thead>';
-  html += '<tbody>';
-  html += result.map(row => {
-    return `<tr>
-      ${columns.map(c => `<td>${row[c]}</td>`).join('\n')}
-      </tr>
-    `
-  }).join('\n');
+  const docFrag = document.createDocumentFragment();
 
-  html += '</tbody></table>';
+  const table = docFrag.appendChild(document.createElement('table'));
+  const headerRow = table.createTHead().insertRow();
+  columns.forEach(c => headerRow.appendChild(document.createElement('th')).innerText = c);
 
-  // TODO: Move to element building instead
-  // This is unsave, specifically because database content
-  // could contain malicious html/js.
-  rootElement.innerHTML = html;
+  const tBody = table.createTBody();
+
+  result.forEach(r => {
+    const row = tBody.insertRow();
+    columns.forEach(c => row.insertCell().innerText = r[c])
+  });
+
+  rootElement.appendChild(docFrag);
 }
 
 async function executeQuery() {
